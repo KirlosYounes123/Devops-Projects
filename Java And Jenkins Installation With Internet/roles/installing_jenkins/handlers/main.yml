@@ -1,0 +1,16 @@
+---
+- name: Enable and Start Jenkins
+  systemd:
+    name: jenkins
+    enabled: yes
+    state: started
+  
+
+
+
+
+- name: Restart Jenkins
+  systemd:
+    name: jenkins
+    state: restarted
+  

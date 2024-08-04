@@ -1,0 +1,12 @@
+---
+- name: Configure dpkg
+  become: yes
+  command: sudo dpkg --configure -a
+  
+
+
+- name: Installing Java
+  apt:
+    name: default-jdk
+    state: present
+ 
