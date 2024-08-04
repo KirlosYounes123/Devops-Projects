@@ -1,0 +1,10 @@
+---
+- name: Installing Tomcat Without Internet
+  hosts: webservers
+  become: yes
+  roles:
+    - Downloading_Packages
+    - Installing_java
+    - Installing_tomcat
+    - Configuring_tomcat
+    - tomcat_service

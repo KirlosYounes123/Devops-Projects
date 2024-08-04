@@ -1,0 +1,13 @@
+---
+- name: Creating service file
+  template:
+    src: tomcat.service.j2
+    dest: /etc/systemd/system/tomcat.service
+  notify: Reload
+
+
+- name: Enable Tomcat
+  systemd:
+    name: tomcat
+    enabled: yes
+    state: started

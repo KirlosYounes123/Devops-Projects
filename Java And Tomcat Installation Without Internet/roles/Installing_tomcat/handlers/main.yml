@@ -1,0 +1,5 @@
+---
+- name: Removing Package
+  file:
+    path: /tmp/apache-tomcat-9.0.91.tar.gz
+    state: absent

@@ -1,0 +1,23 @@
+---
+- name: Copying Java Package
+  copy:
+    src: roles/Downloading_Packages/templates/jdk-22_linux-64_bin.tar.gz
+    dest: /tmp/
+    
+
+- name: Extracting Java
+  unarchive: 
+    src: /tmp/jdk-22_linux-64_bin.tar.gz
+    dest: /opt/
+    remote_src: true
+
+
+- name: installing Java
+  become: yes
+  shell: |
+    sudo update-alternatives --install /usr/bin/java java /opt/jdk-22.0.2/bin/java 1
+    sudo update-alternatives --install /usr/bin/javac javac /opt/jdk-22.0.2/bin/javac 1
+    sudo update-alternatives --install /usr/bin/jar jar /opt/jdk-22.0.2/bin/jar 1
+    sudo update-alternatives --install /usr/bin/jshell jshell /opt/jdk-22.0.2/bin/jshell 1
+
+

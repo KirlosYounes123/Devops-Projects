@@ -1,0 +1,16 @@
+---
+- name: Copying Package
+  copy:
+    src: roles/Downloading_Packages/templates/apache-tomcat-9.0.91.tar.gz
+    dest: /tmp/
+    
+
+
+
+- name: Extracting Package
+  unarchive:
+    src: /tmp/apache-tomcat-9.0.91.tar.gz
+    dest: /opt/
+    remote_src: yes
+
+
