@@ -1,0 +1,84 @@
+pipeline{
+    agent any
+    stages{
+        stage("Check"){
+            steps("Checking and Removing File")
+            {
+                script{
+                    def file = '/var/lib/jenkins/workspace/sparkjava-war-example'
+                    if(fileExists(file)){
+                        sh ''' 
+                            cd /var/lib/jenkins/workspace
+                            rm -r sparkjava-war-example
+                            git clone https://github.com/kliakos/sparkjava-war-example.git
+                            '''
+                    }
+                }
+            }
+        }
+        stage('Build'){
+            steps('Using Maven to Build'){
+                sh '''
+                
+                cd /var/lib/jenkins/workspace
+                cd sparkjava-war-example
+                mvn install
+                cd /var/lib/jenkins/.m2/repository/sparkjava-hello-world/sparkjava-hello-world/1.0/
+                mv *.war ~
+                '''
+            }
+        }
+        stage("Deploy")
+        {
+            steps("Deploying to Tmp Folder and Moving it To Webapps")
+            {
+                sshagent(['ssh_key1']){
+                sh '''
+                scp ~/*.war node1@192.168.1.13:/tmp/
+                #ssh node1@192.168.1.13 sudo chown tomcat /tmp/*war
+                #ssh node1@192.168.1.13 sudo chgrp tomcat /tmp/*war
+                ssh -t machine1@192.168.1.13 "sudo su tomcat && sudo mv /tmp/*.war /opt/apache-tomcat-9.0.93/webapps"
+                
+                '''
+                }
+                sshagent(['ssh_key1']){
+                sh '''
+                scp ~/*.war node2@192.168.1.14:/tmp/
+                #ssh node2@192.168.1.14 sudo chown tomcat /tmp/*war
+                #ssh node2@192.168.1.14 sudo chgrp tomcat /tmp/*war
+                ssh -t node2@192.168.1.14 "sudo su tomcat && sudo mv /tmp/*.war /opt/apache-tomcat-9.0.93/webapps"
+                
+                '''
+                }
+                sshagent(['ssh_key1']){
+                sh '''
+                scp ~/*.war node3@192.168.1.15:/tmp/
+                #ssh node3@192.168.1.15 sudo chown tomcat /tmp/*war
+                #ssh node3@192.168.1.15 sudo chgrp tomcat /tmp/*war
+                ssh -t node3@192.168.1.15 "sudo su tomcat && sudo mv /tmp/*.war /opt/apache-tomcat-9.0.93/webapps"
+                
+                '''
+                }
+                sshagent(['ssh_key1']){
+                sh '''
+                scp ~/*.war node4@192.168.1.15:/tmp/
+                #ssh node4@192.168.1.15 sudo chown tomcat /tmp/*war
+                #ssh node4@192.168.1.15 sudo chgrp tomcat /tmp/*war
+                ssh -t node4@192.168.1.15 "sudo su tomcat && sudo mv /tmp/*.war /opt/apache-tomcat-9.0.93/webapps"
+                
+                '''
+                }
+            }
+        }
+        stage("Cleaning up"){
+            steps("Cleaning"){
+                sh '''
+                cd /var/lib/jenkins/workspace
+                rm -r sparkjava-war-example
+                cd /var/lib/jenkins/.m2/repository
+                rm -r sparkjava-hello-world
+                '''
+            }
+        }
+}
+}
