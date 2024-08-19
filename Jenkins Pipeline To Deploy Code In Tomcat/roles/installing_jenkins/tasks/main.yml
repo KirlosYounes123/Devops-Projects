@@ -1,0 +1,7 @@
+---
+- name: Installing Jenkins
+  become: yes
+  apt:
+    name: jenkins
+    state: present
+    

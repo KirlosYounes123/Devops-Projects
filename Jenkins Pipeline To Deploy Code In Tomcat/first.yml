@@ -1,0 +1,11 @@
+---
+- name: Installing Jenkins using apt
+  hosts: webservers
+  become: yes 
+  roles:
+   - installing_java
+   - Jenkins_key
+   - installing_jenkins
+
+ 
+

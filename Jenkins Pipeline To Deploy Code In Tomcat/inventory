@@ -1,0 +1,18 @@
+[webservers]
+192.168.1.13 ansible_user=node1
+192.168.1.14 ansible_user=node2
+192.168.1.15 ansible_user=node3
+192.168.1.16 ansible_user=node4
+
+[sudo1]
+192.168.1.13 ansible_user=node1
+[sudo2]
+192.168.1.14 ansible_user=node2
+[sudo3]
+192.168.1.15 ansible_user=node3
+[sudo4]
+192.168.1.16 ansible_user=node4
+[mainsudo]
+192.168.1.10 ansible_user=main
+[Jenkins]
+192.168.1.10 ansible_user=main

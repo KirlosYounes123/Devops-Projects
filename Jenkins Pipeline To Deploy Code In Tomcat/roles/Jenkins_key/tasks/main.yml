@@ -1,0 +1,23 @@
+---
+- name: Jenkins Key
+  apt_key:
+    url: <https://pkg.jenkins.io/debian-stable/jenkins.io-2023.key>
+    state: present
+  
+
+
+- name: Adding Repositary
+  ansible.builtin.apt_repository:
+    repo: deb https://pkg.jenkins.io/debian-stable binary/
+    state: present
+    
+
+
+- name: Updating Cache
+  apt:
+    update_cache: yes
+
+- name: Installing Jenkins
+  apt:
+    name: jenkins
+    state: present

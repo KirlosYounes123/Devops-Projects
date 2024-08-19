@@ -1,0 +1,5 @@
+---
+- name: Removing Java Package
+  file:
+    path: /tmp/jdk-22_linux-aarch64_bin.tar.gz
+    state: absent

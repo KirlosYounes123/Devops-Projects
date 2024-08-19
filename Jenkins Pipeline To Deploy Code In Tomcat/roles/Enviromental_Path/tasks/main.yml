@@ -1,0 +1,35 @@
+---
+- name: Creating maven.sh
+  shell: |
+    cd /etc/profile.d
+    touch maven.sh
+    
+- name: Enviromental Path Edit for JDK and Maven
+  become: yes
+  lineinfile:
+    path: /etc/profile.d/maven.sh
+    line: "{{ item }}"
+  with_items:
+  #- export JAVA_HOME=/opt/jdk-22.0.2
+    - export M2_HOME=/opt/apache-maven-3.9.8 maven
+    - export PATH=${M2_HOME}/bin:${PATH}
+  #- export PATH=${JAVA_HOME}/bin:${PATH}
+
+
+- name: Bash Execute
+  become: yes
+  shell: |
+    sudo chmod +x /etc/profile.d/maven.sh
+    bash /etc/profile.d/maven.sh
+
+
+- name: Editing .Profile
+  become: yes
+  lineinfile:
+    path: ~/.profile
+    line: "{{ item }}"
+  with_items:
+  #- JAVA_HOME=/opt/jdk-22.0.2
+    - M2_HOME=/opt/apache-maven-3.9.8 maven
+    - PATH=${M2_HOME}/bin:${PATH}
+  

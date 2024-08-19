@@ -1,0 +1,31 @@
+---
+- name: Installing JDK and Tomcat Without Internet
+  hosts: webservers
+  become: yes
+  vars_prompt:
+    - name: new_tomcat_password_encrypted
+      prompt: Enter Password
+      private: true
+      encrypt: sha512_crypt
+      confirm: true
+      unsafe: true
+  roles:
+    - Enabling_Sudo 
+    - Downloading_Packages
+    - Installing_java
+    - Installing_tomcat
+    - tomcat_service
+    - Configuring_tomcat
+    - maven_install
+    - Enviromental_Path
+
+
+
+- name: Installing JDK, Jenkins and Maven With Internet
+  hosts: Jenkins
+  become: yes
+  roles:
+    - installing_java
+    - Jenkins_key
+    - maven_install
+    - Enviromental_Path

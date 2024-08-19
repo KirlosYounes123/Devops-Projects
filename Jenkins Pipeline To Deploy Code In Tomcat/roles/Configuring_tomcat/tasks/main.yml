@@ -1,0 +1,8 @@
+---
+
+- name: Configuring tomcat
+  become: yes
+  template:
+    src: tomcat-users.xml.j2
+    dest: /opt/apache-tomcat-9.0.93/conf/tomcat-users.xml
+    

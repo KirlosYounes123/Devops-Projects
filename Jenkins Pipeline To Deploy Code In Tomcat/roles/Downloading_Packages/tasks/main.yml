@@ -1,0 +1,27 @@
+---
+- name: Downloading Java Package
+  get_url:
+    url: <https://download.oracle.com/java/22/latest/jdk-22_linux-x64_bin.tar.gz>
+    dest: roles/Downloading_Packages/templates/jdk-22_linux-64_bin.tar.gz
+  become: yes
+  delegate_to: localhost
+  run_once: yes
+
+
+- name: Downloading tomcat Package
+  get_url:
+    url: <https://dlcdn.apache.org/tomcat/tomcat-9/v9.0.93/bin/apache-tomcat-9.0.93.tar.gz>
+    dest: roles/Downloading_Packages/templates/apache-tomcat-9.0.93.tar.gz
+  become: yes
+  delegate_to: localhost
+  run_once: yes
+
+- name: Downloading Maven Package
+  get_url:
+      url: <https://dlcdn.apache.org/maven/maven-3/3.9.8/binaries/apache-maven-3.9.8-bin.tar.gz>
+      dest: roles/Downloading_Packages/templates/apache-maven-3.9.8-bin.tar.gz
+  become: yes
+  delegate_to: localhost
+  run_once: yes
+    
+    

@@ -1,0 +1,37 @@
+---
+- name: Enabling Sudo
+  become: yes
+  template:
+    src: node1
+    dest: /etc/sudoers.d
+  when: inventory_hostname in groups['sudo1']
+
+
+- name: Enabling Sudo
+  become: yes
+  template:
+    src: node2
+    dest: /etc/sudoers.d
+  when: inventory_hostname in groups['sudo2']
+
+- name: Enabling Sudo
+  become: yes
+  template:
+    src: node3
+    dest: /etc/sudoers.d
+  when: inventory_hostname in groups['sudo3']
+
+
+- name: Enabling Sudo
+  become: yes
+  template:
+    src: node4
+    dest: /etc/sudoers.d
+  when: inventory_hostname in groups['sudo4']
+
+- name: Enabling Sudo
+  become: yes
+  template:
+    src: main
+    dest: /etc/sudoers.d
+  when: inventory_hostname in groups['mainsudo']

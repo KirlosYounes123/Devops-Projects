@@ -1,0 +1,5 @@
+--- 
+- name: Removing Maven Package
+  file:
+    path: /tmp/apache-maven-3.9.8-bin.tar.gz
+    state: absent

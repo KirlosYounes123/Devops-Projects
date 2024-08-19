@@ -1,0 +1,12 @@
+---
+- name: Moving Maven On Target Machines
+  copy:
+    src: roles/Downloading_Packages/templates/apache-maven-3.9.8-bin.tar.gz
+    dest: /tmp/
+  
+
+- name: Extracting Package
+  unarchive:
+    src: /tmp/apache-maven-3.9.8-bin.tar.gz
+    dest: /opt/
+    remote_src: yes

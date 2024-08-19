@@ -1,0 +1,36 @@
+---
+- name: Configuring User and Groups
+  become: yes
+  shell: |
+    sudo groupadd tomcat
+    cd /opt/apache-tomcat-9.0.93
+    sudo useradd -s /bin/bash -g tomcat -d /opt/apache-tomcat-9.0.93 tomcat
+    sudo chgrp -R tomcat /opt/apache-tomcat-9.0.93
+    sudo chmod -R g+r conf
+    sudo chmod g+x conf
+    sudo chown -R tomcat webapps/ work/ temp/ logs/
+    sudo chmod +x /opt/apache-tomcat-9.0.93/bin/*.sh
+    sudo adduser tomcat sudo
+
+- name: Changing Tomcat Password
+  become: yes
+  user:
+    name: tomcat
+    password : "{{new_tomcat_password_encrypted}}"
+
+- name: Creating service file
+  template:
+    src: tomcat.service.j2
+    dest: /etc/systemd/system/tomcat.service
+  
+
+- name: Reload
+  systemd:
+    daemon_reload: yes
+
+- name: Enabling Tomcat
+  become: yes
+  systemd:
+    name: tomcat
+    enabled: yes
+    state: started
