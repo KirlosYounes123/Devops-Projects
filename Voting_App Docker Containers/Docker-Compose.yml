@@ -1,0 +1,89 @@
+services:
+  pythonapp:
+    image: pythonapp:latest
+    volumes:
+    - ./Python Based Web App:/usr/local/app
+    ports: 
+      - "5000:80"
+    depends_on: 
+      redis:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD","curl","-f","http://localhost"]
+      interval: 15s
+      timeout: 5s
+      retries: 4
+      start_period: 15s
+    networks:
+      - front-end
+      - back-end
+  redis:
+    image: redis:alpine
+    healthcheck:
+      test: ["CMD-SHELL", "redis-cli ping | grep PONG"]
+      interval: 1s
+      timeout: 3s
+      retries: 5
+    volumes:
+    - "./healthchecks:/healthchecks"
+    networks:
+      - back-end
+  postgres:
+    image: postgres:15
+    user: "postgres"
+    environment:
+      POSTGRES_USER: "postgres"
+      POSTGRES_PASSWORD: "postgres"
+      POSTGRES_DB: "kkok"
+      PGUSER: "postgres"
+    volumes:
+    - "db-data:/var/lib/postgresql/data"
+    - "./healthchecks:/healthchecks"
+    healthcheck:
+      test: pg_isready -U myuser -d db_prod
+      interval: 10s
+      timeout: 3s
+      retries: 3
+    networks:
+      - back-end
+  dot:
+    image: dot:latest
+    depends_on:
+      redis:
+        condition: service_healthy
+      postgres:
+        condition: service_healthy
+    networks:
+      - back-end
+  result:
+    image: result:latest
+    depends_on:
+      postgres:
+        condition: service_healthy
+    volumes:
+    - ./Results:/usr/local/app
+    ports:
+    - "5001:80"
+    - "127.0.0.1:9229:9229"
+    networks:
+      - front-end
+      - back-end
+  seed:
+    image: votedata:latest
+    profiles: ["seed"]
+    depends_on:
+      pythonapp:
+        condition: service_healthy
+    restart: "no"
+    networks:
+      - back-end
+volumes:
+  db-data:
+
+networks:
+  front-end:
+  back-end:
+
+
+
+   
